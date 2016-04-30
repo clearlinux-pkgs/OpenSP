@@ -4,7 +4,7 @@
 #
 Name     : OpenSP
 Version  : 1.5.2
-Release  : 11
+Release  : 12
 URL      : http://downloads.sourceforge.net/openjade/OpenSP-1.5.2.tar.gz
 Source0  : http://downloads.sourceforge.net/openjade/OpenSP-1.5.2.tar.gz
 Summary  : The OpenJade Group's SGML and XML parsing tools
