@@ -1,4 +1,5 @@
 PKG_NAME := OpenSP
-URL := http://downloads.sourceforge.net/openjade/OpenSP-1.5.2.tar.gz
+URL := https://sourceforge.net/projects/openjade/files/opensp/1.5.2/OpenSP-1.5.2.tar.gz
+
 
 include ../common/Makefile.common

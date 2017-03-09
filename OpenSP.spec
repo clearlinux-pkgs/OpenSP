@@ -4,9 +4,9 @@
 #
 Name     : OpenSP
 Version  : 1.5.2
-Release  : 12
-URL      : http://downloads.sourceforge.net/openjade/OpenSP-1.5.2.tar.gz
-Source0  : http://downloads.sourceforge.net/openjade/OpenSP-1.5.2.tar.gz
+Release  : 13
+URL      : https://sourceforge.net/projects/openjade/files/opensp/1.5.2/OpenSP-1.5.2.tar.gz
+Source0  : https://sourceforge.net/projects/openjade/files/opensp/1.5.2/OpenSP-1.5.2.tar.gz
 Summary  : The OpenJade Group's SGML and XML parsing tools
 Group    : Development/Tools
 License  : MIT
@@ -47,6 +47,7 @@ Group: Development
 Requires: OpenSP-lib
 Requires: OpenSP-bin
 Requires: OpenSP-data
+Provides: OpenSP-devel
 
 %description dev
 dev components for the OpenSP package.
@@ -81,16 +82,20 @@ locales components for the OpenSP package.
 %setup -q -n OpenSP-1.5.2
 
 %build
+export LANG=C
+export SOURCE_DATE_EPOCH=1489101618
 %configure --disable-static --disable-doc-build
 make V=1  %{?_smp_mflags}
 
 %check
+export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=intel.com,localhost
+export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
+export SOURCE_DATE_EPOCH=1489101618
 rm -rf %{buildroot}
 %make_install
 %find_lang sp5
@@ -277,7 +282,7 @@ rm -rf %{buildroot}
 /usr/include/OpenSP/sptchar.h
 /usr/include/OpenSP/types.h
 /usr/include/OpenSP/xnew.h
-/usr/lib64/*.so
+/usr/lib64/libosp.so
 
 %files doc
 %defattr(-,root,root,-)
@@ -285,8 +290,9 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libosp.so.5
+/usr/lib64/libosp.so.5.0.0
 
-%files locales -f sp5.lang 
+%files locales -f sp5.lang
 %defattr(-,root,root,-)
 
