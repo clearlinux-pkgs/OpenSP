@@ -1,0 +1,4 @@
+pushd $RPM_BUILD_ROOT%{_bindir}
+for b in os* onsgmls; do
+  ln -sf ${b} ${b#o}
+done

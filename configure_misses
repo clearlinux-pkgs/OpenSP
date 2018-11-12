@@ -1,0 +1,15 @@
+Configure miss: whether make sets $(MAKE)
+Configure miss: whether fgets_unlocked is declared
+Configure miss: osfcn.h usability
+Configure miss: osfcn.h presence
+Configure miss: osfcn.h
+Configure miss: whether the compiler supports placement operator delete
+Configure miss: whether GNU C++ links with libg++ if we include new.h
+Configure miss: whether new_handler accepts size_t and returns int
+Configure miss: Windows and DOS and OS/2 style pathnames
+Configure miss: whether to include support for http
+Configure miss: default catalog
+Configure miss: default search path
+Configure miss: whether to include support for XML Formatted Messages
+Configure miss: whether to build docs (man and html)
+Configure miss: whether to build all docs (man, html, pdf, ps)

@@ -4,18 +4,19 @@
 #
 Name     : OpenSP
 Version  : 1.5.2
-Release  : 16
+Release  : 17
 URL      : https://sourceforge.net/projects/openjade/files/opensp/1.5.2/OpenSP-1.5.2.tar.gz
 Source0  : https://sourceforge.net/projects/openjade/files/opensp/1.5.2/OpenSP-1.5.2.tar.gz
 Summary  : The OpenJade Group's SGML and XML parsing tools
 Group    : Development/Tools
 License  : MIT
-Requires: OpenSP-bin
-Requires: OpenSP-lib
-Requires: OpenSP-data
-Requires: OpenSP-doc
-Requires: OpenSP-locales
+Requires: OpenSP-bin = %{version}-%{release}
+Requires: OpenSP-data = %{version}-%{release}
+Requires: OpenSP-lib = %{version}-%{release}
+Requires: OpenSP-license = %{version}-%{release}
+Requires: OpenSP-locales = %{version}-%{release}
 BuildRequires : bison
+BuildRequires : gfortran
 BuildRequires : libxslt-bin
 BuildRequires : util-linux
 
@@ -27,7 +28,8 @@ SGML and XML files.
 %package bin
 Summary: bin components for the OpenSP package.
 Group: Binaries
-Requires: OpenSP-data
+Requires: OpenSP-data = %{version}-%{release}
+Requires: OpenSP-license = %{version}-%{release}
 
 %description bin
 bin components for the OpenSP package.
@@ -44,10 +46,10 @@ data components for the OpenSP package.
 %package dev
 Summary: dev components for the OpenSP package.
 Group: Development
-Requires: OpenSP-lib
-Requires: OpenSP-bin
-Requires: OpenSP-data
-Provides: OpenSP-devel
+Requires: OpenSP-lib = %{version}-%{release}
+Requires: OpenSP-bin = %{version}-%{release}
+Requires: OpenSP-data = %{version}-%{release}
+Provides: OpenSP-devel = %{version}-%{release}
 
 %description dev
 dev components for the OpenSP package.
@@ -64,10 +66,19 @@ doc components for the OpenSP package.
 %package lib
 Summary: lib components for the OpenSP package.
 Group: Libraries
-Requires: OpenSP-data
+Requires: OpenSP-data = %{version}-%{release}
+Requires: OpenSP-license = %{version}-%{release}
 
 %description lib
 lib components for the OpenSP package.
+
+
+%package license
+Summary: license components for the OpenSP package.
+Group: Default
+
+%description license
+license components for the OpenSP package.
 
 
 %package locales
@@ -82,35 +93,52 @@ locales components for the OpenSP package.
 %setup -q -n OpenSP-1.5.2
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1489101618
+export SOURCE_DATE_EPOCH=1542057986
 %configure --disable-static --disable-doc-build
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1489101618
+export SOURCE_DATE_EPOCH=1542057986
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/OpenSP
+cp COPYING %{buildroot}/usr/share/package-licenses/OpenSP/COPYING
 %make_install
 %find_lang sp5
+## install_append content
+pushd $RPM_BUILD_ROOT%{_bindir}
+for b in os* onsgmls; do
+ln -sf ${b} ${b#o}
+done
+## install_append end
 
 %files
 %defattr(-,root,root,-)
 
 %files bin
 %defattr(-,root,root,-)
+/usr/bin/nsgmls
 /usr/bin/onsgmls
 /usr/bin/osgmlnorm
 /usr/bin/ospam
 /usr/bin/ospcat
 /usr/bin/ospent
 /usr/bin/osx
+/usr/bin/sgmlnorm
+/usr/bin/spam
+/usr/bin/spcat
+/usr/bin/spent
+/usr/bin/sx
 
 %files data
 %defattr(-,root,root,-)
@@ -285,13 +313,17 @@ rm -rf %{buildroot}
 /usr/lib64/libosp.so
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 %doc /usr/share/doc/OpenSP/*
 
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libosp.so.5
 /usr/lib64/libosp.so.5.0.0
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/OpenSP/COPYING
 
 %files locales -f sp5.lang
 %defattr(-,root,root,-)
