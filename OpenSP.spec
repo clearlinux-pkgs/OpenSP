@@ -4,7 +4,7 @@
 #
 Name     : OpenSP
 Version  : 1.5.2
-Release  : 17
+Release  : 18
 URL      : https://sourceforge.net/projects/openjade/files/opensp/1.5.2/OpenSP-1.5.2.tar.gz
 Source0  : https://sourceforge.net/projects/openjade/files/opensp/1.5.2/OpenSP-1.5.2.tar.gz
 Summary  : The OpenJade Group's SGML and XML parsing tools
@@ -50,6 +50,7 @@ Requires: OpenSP-lib = %{version}-%{release}
 Requires: OpenSP-bin = %{version}-%{release}
 Requires: OpenSP-data = %{version}-%{release}
 Provides: OpenSP-devel = %{version}-%{release}
+Requires: OpenSP = %{version}-%{release}
 
 %description dev
 dev components for the OpenSP package.
@@ -97,7 +98,12 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542057986
+export SOURCE_DATE_EPOCH=1561766992
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static --disable-doc-build
 make  %{?_smp_mflags}
 
@@ -109,17 +115,18 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1542057986
+export SOURCE_DATE_EPOCH=1561766992
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/OpenSP
 cp COPYING %{buildroot}/usr/share/package-licenses/OpenSP/COPYING
 %make_install
 %find_lang sp5
 ## install_append content
-pushd $RPM_BUILD_ROOT%{_bindir}
+pushd %{buildroot}/usr/bin
 for b in os* onsgmls; do
 ln -sf ${b} ${b#o}
 done
+popd
 ## install_append end
 
 %files
